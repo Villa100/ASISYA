@@ -1,0 +1,4 @@
+# CODEOWNERS define revisiones automáticas para PRs
+# Formato: ruta  usuarios o equipos
+# Ajustar con los usuarios reales del repositorio
+* @tu-usuario

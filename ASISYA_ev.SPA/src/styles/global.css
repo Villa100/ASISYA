@@ -1,0 +1,859 @@
+/* ============================================
+   ESTILOS GLOBALES - ASISYA SPA
+   Diseño moderno y profesional
+   ============================================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Paleta de colores profesional */
+  --primary: #2563eb;
+  --primary-dark: #1e40af;
+  --primary-light: #3b82f6;
+  --secondary: #10b981;
+  --secondary-dark: #059669;
+  --danger: #ef4444;
+  --danger-dark: #dc2626;
+  --warning: #f59e0b;
+  --dark: #1f2937;
+  --gray: #6b7280;
+  --gray-light: #f3f4f6;
+  --gray-border: #e5e7eb;
+  --white: #ffffff;
+  
+  /* Sombras */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Bordes */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  
+  /* Transiciones */
+  --transition: all 0.2s ease-in-out;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: var(--dark);
+  line-height: 1.6;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* ============================================
+   TIPOGRAFÍA
+   ============================================ */
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 1.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 1.25rem;
+}
+
+h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--dark);
+  margin-bottom: 1rem;
+}
+
+p {
+  color: var(--gray);
+  margin-bottom: 1rem;
+}
+
+/* ============================================
+   BOTONES
+   ============================================ */
+
+button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  font-family: inherit;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+button.btn-primary {
+  background: var(--primary);
+  color: var(--white);
+}
+
+button.btn-primary:hover:not(:disabled) {
+  background: var(--primary-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+button.btn-secondary {
+  background: var(--secondary);
+  color: var(--white);
+}
+
+button.btn-secondary:hover:not(:disabled) {
+  background: var(--secondary-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+button.btn-danger {
+  background: var(--danger);
+  color: var(--white);
+}
+
+button.btn-danger:hover:not(:disabled) {
+  background: var(--danger-dark);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+button.btn-outline {
+  background: transparent;
+  border: 2px solid var(--primary);
+  color: var(--primary);
+}
+
+button.btn-outline:hover:not(:disabled) {
+  background: var(--primary);
+  color: var(--white);
+}
+
+button.btn-ghost {
+  background: transparent;
+  color: var(--gray);
+  box-shadow: none;
+}
+
+button.btn-ghost:hover:not(:disabled) {
+  background: var(--gray-light);
+}
+
+/* ============================================
+   INPUTS Y FORMULARIOS
+   ============================================ */
+
+input, select, textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 2px solid var(--gray-border);
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+  font-family: inherit;
+  background: var(--white);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--dark);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-error {
+  color: var(--danger);
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+/* ============================================
+   TARJETAS
+   ============================================ */
+
+.card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-xl);
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.card-header {
+  border-bottom: 2px solid var(--gray-border);
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.card-footer {
+  border-top: 2px solid var(--gray-border);
+  padding-top: 1rem;
+  margin-top: 1.5rem;
+}
+
+/* ============================================
+   TABLAS
+   ============================================ */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+thead {
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: var(--white);
+}
+
+thead th {
+  padding: 1rem;
+  font-weight: 600;
+  text-align: left;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.05em;
+}
+
+tbody tr {
+  border-bottom: 1px solid var(--gray-border);
+  transition: var(--transition);
+}
+
+tbody tr:hover {
+  background: var(--gray-light);
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+tbody td {
+  padding: 1rem;
+}
+
+/* ============================================
+   NAVEGACIÓN
+   ============================================ */
+
+nav {
+  background: var(--white);
+  padding: 1rem 2rem;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-lg);
+  margin-bottom: 2rem;
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+nav a {
+  color: var(--gray);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  transition: var(--transition);
+}
+
+nav a:hover {
+  color: var(--primary);
+  background: var(--gray-light);
+}
+
+nav a.active {
+  color: var(--primary);
+  background: rgba(37, 99, 235, 0.1);
+}
+
+/* Grupos de menú (desplegables) */
+.menu-group {
+  position: relative;
+}
+
+.menu-button {
+  color: var(--gray);
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  cursor: default;
+  user-select: none;
+}
+
+.menu-group.active > .menu-button,
+.menu-button:hover {
+  color: var(--primary);
+  background: var(--gray-light);
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  background: var(--white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 0.5rem;
+  display: none;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 220px;
+  z-index: 1100;
+}
+
+.menu-group:hover .menu-dropdown {
+  display: flex;
+}
+
+.menu-dropdown a {
+  display: block;
+  white-space: nowrap;
+}
+
+/* ============================================
+   PAGINACIÓN
+   ============================================ */
+
+.pagination {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+}
+
+.pagination button {
+  padding: 0.5rem 1rem;
+  min-width: 40px;
+}
+
+.pagination span {
+  padding: 0 1rem;
+  color: var(--gray);
+  font-weight: 500;
+}
+
+/* ============================================
+   UTILIDADES
+   ============================================ */
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mt-1 { margin-top: 0.5rem; }
+.mt-2 { margin-top: 1rem; }
+.mt-3 { margin-top: 1.5rem; }
+.mt-4 { margin-top: 2rem; }
+
+.mb-1 { margin-bottom: 0.5rem; }
+.mb-2 { margin-bottom: 1rem; }
+.mb-3 { margin-bottom: 1.5rem; }
+.mb-4 { margin-bottom: 2rem; }
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.gap-1 { gap: 0.5rem; }
+.gap-2 { gap: 1rem; }
+.gap-3 { gap: 1.5rem; }
+.gap-4 { gap: 2rem; }
+
+/* ============================================
+   FORMULARIOS
+   ============================================ */
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 500;
+  color: var(--dark);
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--gray-border);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: var(--transition);
+  background: var(--white);
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.form-group input[type="checkbox"] {
+  width: auto;
+  margin-right: 0.5rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--gray-border);
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.checkbox-label span {
+  margin-left: 0.5rem;
+}
+
+/* ============================================
+   ALERTS Y MENSAJES
+   ============================================ */
+
+.alert {
+  padding: 1rem 1.5rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.alert-success {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--secondary-dark);
+  border: 2px solid var(--secondary);
+}
+
+.alert-error {
+  background: rgba(239, 68, 68, 0.1);
+  color: var(--danger-dark);
+  border: 2px solid var(--danger);
+}
+
+.alert-warning {
+  background: rgba(245, 158, 11, 0.1);
+  color: #d97706;
+  border: 2px solid var(--warning);
+}
+
+.alert-info {
+  background: rgba(37, 99, 235, 0.1);
+  color: var(--primary-dark);
+  border: 2px solid var(--primary);
+}
+
+/* ============================================
+   LOADING SPINNER
+   ============================================ */
+
+.spinner {
+  border: 4px solid var(--gray-light);
+  border-top: 4px solid var(--primary);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 2rem auto;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* ============================================
+   DOCUMENTATION STYLES
+   ============================================ */
+
+.documentation-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.documentation-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding-bottom: 2rem;
+  border-bottom: 3px solid var(--primary);
+}
+
+.documentation-header h1 {
+  color: var(--primary);
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.documentation-header .subtitle {
+  color: var(--gray);
+  font-size: 1.2rem;
+}
+
+.doc-section {
+  margin-bottom: 3rem;
+}
+
+.doc-section h2 {
+  color: var(--dark);
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--gray-border);
+}
+
+.doc-section h3 {
+  color: var(--primary-dark);
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+}
+
+.doc-section h4 {
+  color: var(--dark);
+  font-size: 1.1rem;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.doc-section p {
+  line-height: 1.8;
+  color: var(--dark);
+  margin-bottom: 1rem;
+}
+
+.doc-section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.doc-section ul li {
+  padding: 0.5rem 0;
+  line-height: 1.6;
+  color: var(--dark);
+}
+
+.doc-section ul li::before {
+  content: "▸ ";
+  color: var(--primary);
+  font-weight: bold;
+  margin-right: 0.5rem;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.feature-card {
+  background: var(--gray-light);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  border-left: 4px solid var(--primary);
+  transition: var(--transition);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.feature-card h3 {
+  margin-bottom: 1rem;
+}
+
+.code-block {
+  background: var(--dark);
+  color: #e5e7eb;
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  margin: 1rem 0;
+}
+
+.code-block h3 {
+  color: var(--secondary);
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.code-block pre {
+  margin: 0;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  white-space: pre;
+}
+
+.info-card {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+  color: white;
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  margin: 1rem 0;
+  box-shadow: var(--shadow-md);
+}
+
+.info-card h4 {
+  color: white;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.info-card ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.info-card ul li {
+  padding: 0.5rem 0;
+  color: white;
+}
+
+.info-card ul li::before {
+  content: "✓ ";
+  margin-right: 0.5rem;
+  font-weight: bold;
+}
+
+.info-card a {
+  color: white;
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+.info-card a:hover {
+  opacity: 0.8;
+}
+
+.functionality-card {
+  background: white;
+  border: 2px solid var(--gray-border);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 1.5rem;
+  transition: var(--transition);
+}
+
+.functionality-card:hover {
+  border-color: var(--primary);
+  box-shadow: var(--shadow-md);
+}
+
+.functionality-card h3 {
+  margin-bottom: 1rem;
+  color: var(--primary-dark);
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.tech-card {
+  background: var(--gray-light);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.tech-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  background: white;
+}
+
+.tech-card h4 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  border-bottom: 2px solid var(--primary);
+  padding-bottom: 0.5rem;
+}
+
+.architecture-info,
+.performance-info {
+  background: var(--gray-light);
+  padding: 1.5rem;
+  border-radius: var(--radius-md);
+  margin-top: 1rem;
+}
+
+.architecture-info p,
+.performance-info p {
+  margin-bottom: 1rem;
+}
+
+.architecture-info ul,
+.performance-info ul {
+  margin-top: 1rem;
+}
+
+.doc-footer {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 2px solid var(--gray-border);
+  text-align: center;
+  color: var(--gray);
+}
+
+.doc-footer p {
+  margin-bottom: 1rem;
+}
+
+.doc-footer a {
+  color: var(--primary);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.doc-footer a:hover {
+  text-decoration: underline;
+}
+
+.version-info {
+  font-size: 0.9rem;
+  color: var(--gray);
+  margin-top: 1rem;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  
+  nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  table {
+    font-size: 0.875rem;
+  }
+  
+  thead th, tbody td {
+    padding: 0.75rem;
+  }
+  
+  h1 {
+    font-size: 2rem;
+    padding: 1rem 2rem;
+  
+  h2 {
+    font-size: 1.5rem;
+    display: flex;
+    gap: 1rem;
+  /* Documentation responsive */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  .documentation-container {
+    padding: 1rem;
+  }
+
+  .documentation-header h1 {
+    font-size: 1.8rem;
+  }
+
+  .features-grid,
+  .tech-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .code-block pre {
+    font-size: 0.75rem;
+  }
+}

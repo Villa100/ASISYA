@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  # Base de Datos: PostgreSQL
+  db:
+    image: postgres:15-alpine
+    container_name: db_proyecto
+    restart: always
+    environment:
+      POSTGRES_USER: user_dev
+      POSTGRES_PASSWORD: password_dev
+      POSTGRES_DB: mi_api_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  # Caché Distribuida: Redis
+  cache:
+    image: redis:latest
+    container_name: cache_proyecto
+    restart: always
+    ports:
+      - "6379:6379"
+
+  # API REST (.NET Core)
+  api:
+    build:
+      context: .
+      dockerfile: ASISYA_ev.Api/Dockerfile
+    container_name: ASISYA_ev
+    restart: always
+    environment:
+      # Cadena de conexión usando el nombre del servicio 'db'
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=mi_api_db;Username=user_dev;Password=password_dev;
+      CacheSettings__RedisHost: cache:6379 # Host usando el nombre del servicio 'cache'
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - cache
+
+volumes:
+  db-data:
