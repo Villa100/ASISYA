@@ -62,7 +62,7 @@ jobs:
       run: docker save asisya-ev-api:latest | gzip > asisya-ev-api.tar.gz
 
     - name: Upload Docker image artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v5
       with:
         name: docker-image
         path: asisya-ev-api.tar.gz
