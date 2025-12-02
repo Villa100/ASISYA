@@ -1900,16 +1900,11 @@ Este proyecto es de código abierto bajo la licencia MIT.
 ## 👨‍💻 Autor
 
 **Solicitud ASISYA**
-<<<<<<< HEAD
+
 - GitHub: [@Villa100](https://github.com/Villa100)
 - GitHub Proyecto: (https://github.com/Villa100/ASISYA)
 - Email: edgarvillamil1@gmail.com
-=======
-- GitHub: [@vILLA100](https://github.com/vILLA100)
-- GitHub Proyecto: (https://github.com/vILLA100/ASISYA)
-- Email: edgarvillamil1@gmail.com
 
->>>>>>> dff9a3ddc17804191676dd813e10556c57fba270
 
 ---
 
