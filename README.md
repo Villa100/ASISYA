@@ -100,7 +100,118 @@ El proyecto sigue **Arquitectura Hexagonal (Ports & Adapters)** combinada con **
 └─────────────────────────────────────────────────────────┘
 ```
 
-### **Flujo de una Request (Ejemplo: GET /api/Product)**
+---
+
+## 🔄 Flujo Completo de una Request
+
+### **Escenario Real: GET /api/Product**
+
+Cuando un usuario solicita ver productos, esta es la ruta completa que sigue la petición a través de todas las capas:
+
+```
+┌──────────────────────────────────────────────────────────────────────────┐
+│                          CLIENTE (Navegador/SPA)                          │
+│                                                                            │
+│  Usuario hace click en "Productos" → Axios envía GET request             │
+└────────────────────────────────┬───────────────────────────────────────┘
+                                  │ HTTP GET /api/product?page=1&size=10
+                                  │ Headers: { Authorization: Bearer <JWT> }
+                                  ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                        CAPA 1: API (Presentación)                         │
+│  ┌────────────────────────────────────────────────────────────────┐      │
+│  │  1. Middleware Pipeline                                         │      │
+│  │     ├─ UseHttpsRedirection() → Verifica HTTPS                  │      │
+│  │     ├─ UseCors() → Permite origen localhost:5173               │      │
+│  │     ├─ UseAuthentication() → Valida JWT, extrae Claims         │      │
+│  │     └─ UseAuthorization() → Verifica permisos [Authorize]      │      │
+│  └────────────────────────────────────────────────────────────────┘      │
+│                                  ▼                                         │
+│  ┌────────────────────────────────────────────────────────────────┐      │
+│  │  2. ProductController.GetProducts(page, size)                   │      │
+│  │     • Recibe parámetros: page=1, size=10                       │      │
+│  │     • Crea Query: new GetProductsQuery(1, 10)                  │      │
+│  │     • NO conoce base de datos ni caché                         │      │
+│  └────────────────────────────────────────────────────────────────┘      │
+└────────────────────────────────┬───────────────────────────────────────┘
+                                  │ _mediator.Send(query)
+                                  ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                    CAPA 2: APPLICATION (Casos de Uso)                     │
+│  ┌────────────────────────────────────────────────────────────────┐      │
+│  │  3. MediatR (Mediador)                                          │      │
+│  │     • Recibe GetProductsQuery                                   │      │
+│  │     • Busca Handler registrado                                  │      │
+│  │     • Inyecta IProductQueryService                             │      │
+│  └────────────────────────────────────────────────────────────────┘      │
+│                                  ▼                                         │
+│  ┌────────────────────────────────────────────────────────────────┐      │
+│  │  4. GetProductsHandler.Handle()                                 │      │
+│  │     • Delega a IProductQueryService                            │      │
+│  │     • NO ejecuta SQL directamente                              │      │
+│  └────────────────────────────────────────────────────────────────┘      │
+└────────────────────────────────┬───────────────────────────────────────┘
+                                  │ Llamada a Port (interfaz)
+                                  ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                  CAPA 4: INFRASTRUCTURE (Adaptadores)                     │
+│  ┌────────────────────────────────────────────────────────────────┐      │
+│  │  5. ProductQueryService                                         │      │
+│  │     • Construye key: "product:list:v5:page1:size10"           │      │
+│  └────────────────────────────────────────────────────────────────┘      │
+│                                  ▼                                         │
+│  ┌────────────────────────────────────────────────────────────────┐      │
+│  │  6. Redis Cache (Verificación)                                  │      │
+│  │     ┌─ ¿Existe en caché?                                       │      │
+│  │     ├─ SÍ → Deserializa y retorna [~5ms] ⚡                     │      │
+│  │     └─ NO → Continúa a PostgreSQL ▼                            │      │
+│  └────────────────────────────────────────────────────────────────┘      │
+│                                  ▼ (Cache MISS)                           │
+│  ┌────────────────────────────────────────────────────────────────┐      │
+│  │  7. EF Core + PostgreSQL                                        │      │
+│  │     • LINQ → SQL: SELECT + JOIN + WHERE + LIMIT                │      │
+│  │     • PostgreSQL ejecuta query con índices                     │      │
+│  │     • Retorna 10 filas [~50-100ms] 🔍                           │      │
+│  └────────────────────────────────────────────────────────────────┘      │
+│                                  ▼                                         │
+│  ┌────────────────────────────────────────────────────────────────┐      │
+│  │  8. Mapeo y Caché                                               │      │
+│  │     • Product → ProductListDto (mapeo)                         │      │
+│  │     • Guarda en Redis con TTL 2min                             │      │
+│  │     • Retorna PaginatedList<ProductListDto>                    │      │
+│  └────────────────────────────────────────────────────────────────┘      │
+└────────────────────────────────┬───────────────────────────────────────┘
+                                  │ Regreso por las capas
+                                  ▼
+┌──────────────────────────────────────────────────────────────────────────┐
+│                     RESPUESTA AL CLIENTE                                  │
+│  Handler → MediatR → Controller → JSON → Axios → React                   │
+│                                                                            │
+│  Usuario ve tabla con 10 productos + paginación ✅                        │
+└──────────────────────────────────────────────────────────────────────────┘
+```
+
+### **⏱️ Tiempos de Respuesta**
+
+| Escenario | Latencia | Detalle |
+|-----------|----------|---------|
+| **Cache HIT** (90% de casos) | ~10-20ms | Redis en RAM ⚡ |
+| **Cache MISS** (10% de casos) | ~80-150ms | PostgreSQL + índices 🔍 |
+| **Primera request** | ~150-200ms | Caché frío + warm-up ❄️ |
+
+### **🎯 Ventajas del Flujo**
+
+1. **Separación de Responsabilidades**: Cada capa tiene una única función
+2. **Caché Inteligente**: 90% de requests NO tocan PostgreSQL (10x más rápido)
+3. **Escalabilidad**: Fácil agregar réplicas de BD o nodos Redis
+4. **Testeable**: Cada componente puede probarse aisladamente
+5. **Mantenible**: Cambios localizados sin afectar otras capas
+
+**Documentación Completa**: Ver `ARQUITECTURA_SUSTENTACION.md` para detalles técnicos profundos.
+
+---
+
+### **Flujo Simplificado (Legacy)**
 
 ```
 1. HTTP Request → ProductController
@@ -386,18 +497,41 @@ $env:CacheSettings__DetailTtlMinutes = "15"
 
 ## 🚀 Instalación y Ejecución
 
-### **Inicio Rápido con PowerShell (Modo Desarrollo - Recomendado)**
+### **Scripts Automatizados PowerShell**
 
-El proyecto incluye scripts automatizados para desarrollo local **sin Docker**:
+El proyecto incluye scripts completos para gestionar todos los ambientes:
 
+#### **Modo Desarrollo (InMemory - Recomendado para equipos con recursos limitados)**
 ```powershell
-# Iniciar aplicación completa (API + Frontend)
-.\start-all.ps1
+# Iniciar aplicación completa (API + Frontend) sin Docker
+.\start-dev.ps1
 
 # Detener todos los servicios
 .\stop-all.ps1
+```
 
-# Cargar datos de prueba
+#### **Modo Desarrollo con Docker**
+```powershell
+# Iniciar stack completo con contenedores (PostgreSQL + Redis + API)
+.\start-dev-docker.ps1
+
+# Detener servicios Docker
+.\stop-docker.ps1
+
+# Detener y eliminar volúmenes
+.\stop-docker.ps1 -PruneVolumes
+```
+
+#### **Modo Pruebas con Docker**
+```powershell
+# Iniciar entorno de pruebas con contenedores
+.\start-test-docker.ps1
+
+# Detener servicios
+.\stop-docker.ps1
+```
+
+#### **Cargar datos de prueba
 .\load-categories.ps1  # 10 categorías
 .\load-products.ps1    # 500 productos distribuidos
 ```
@@ -501,6 +635,56 @@ El sistema ASISYA puede ejecutarse en los siguientes entornos:
 Cada script prepara el entorno adecuado y ejecuta la aplicación con la configuración correspondiente. Puedes consultar los logs y el estado de los servicios desde la terminal.
 
 **Nota Importante:** Por las características de algunos equipos de desarrollo con insuficientes recursos, no se puede desplegar ambientes con contenedores Docker. En estos casos, se recomienda usar el modo local InMemory.
+
+---
+
+## 🔧 Troubleshooting Docker
+
+¿Problemas con Docker Desktop? ¿Error 500 del engine? Consulta la guía completa:
+
+📖 **[DOCKER_TROUBLESHOOTING.md](./DOCKER_TROUBLESHOOTING.md)**
+
+Soluciones incluidas:
+- ✅ Reiniciar WSL2 y Docker Desktop
+- ✅ Reset a valores de fábrica
+- ✅ Actualizar WSL2
+- ✅ Reinstalar Docker Desktop
+- ✅ Verificar requisitos del sistema
+- ✅ Modo InMemory como alternativa temporal
+
+---
+
+## ⌨️ Atajos de Teclado y Tareas VS Code
+
+El proyecto incluye tareas configuradas y atajos de teclado para iniciar/detener servicios desde VS Code:
+
+### **Atajos de Teclado** (`.vscode/keybindings.json`):
+- `Ctrl+Shift+D Ctrl+Shift+I`: Start Dev (InMemory)
+- `Ctrl+Shift+D Ctrl+Shift+D`: Start Dev Docker
+- `Ctrl+Shift+D Ctrl+Shift+T`: Start Test Docker
+- `Ctrl+Shift+D Ctrl+Shift+S`: Stop Docker
+- `Ctrl+Shift+D Ctrl+Shift+P`: Stop Docker + Prune Volumes
+
+### **Tareas VS Code** (`.vscode/tasks.json`):
+Ejecuta desde: `Terminal → Run Task` o `Ctrl+Shift+P → Tasks: Run Task`
+
+- **Start Dev (InMemory)**: Inicia API y SPA sin Docker
+- **Start Dev Docker**: Inicia stack con contenedores
+- **Start Test Docker**: Inicia entorno de pruebas
+- **Stop Docker**: Detiene servicios Docker
+- **Stop Docker + Prune Volumes**: Detiene y elimina volúmenes
+
+### **Botones en Barra de Estado**:
+Extensiones instaladas automáticamente:
+- 🔍 **Task Explorer** (`spmeesseman.vscode-taskexplorer`): Panel lateral para gestionar tareas
+- 🎯 **Task Buttons** (`spencerwmiles.vscode-task-buttons`): Botones en la barra inferior
+
+Botones disponibles en la barra inferior de VS Code:
+- ▶ Dev (InMemory)
+- ▶ Dev Docker
+- ▶ Test Docker
+- ■ Stop Docker
+- 🗑 Stop + Prune
 
 ---
 
@@ -1715,9 +1899,10 @@ Este proyecto es de código abierto bajo la licencia MIT.
 
 ## 👨‍💻 Autor
 
-**Equipo ASISYA**
-- GitHub: [@tu-usuario](https://github.com/tu-usuario)
-- Email: contacto@asisya.com
+**Solicitud ASISYA**
+- GitHub: [@Villa100](https://github.com/Villa100)
+- GitHub Proyecto: (https://github.com/Villa100/ASISYA)
+- Email: edgarvillamil1@gmail.com
 
 ---
 

@@ -12,6 +12,7 @@ import DeployGuide from './pages/DeployGuide'
 import ApiTests from './pages/ApiTests'
 import Containers from './pages/Containers'
 import UnitTestsGuide from './pages/UnitTestsGuide'
+import GitGithubGuide from './pages/GitGithubGuide'
 
 function PrivateRoute({ children }) {
   const token = localStorage.getItem('token')
@@ -73,13 +74,14 @@ export default function App() {
             🏷️ Categorías
           </Link>
           {(() => {
-            const isDocsActive = ['/documentation','/containers'].includes(location.pathname)
+            const isDocsActive = ['/documentation','/containers','/git-github'].includes(location.pathname)
             return (
               <div className={`menu-group ${isDocsActive ? 'active' : ''}`}>
                 <span className="menu-button">📚 Documentación ▾</span>
                 <div className="menu-dropdown">
                   <Link to="/documentation" className={location.pathname === '/documentation' ? 'active' : ''}>Documentación</Link>
                   <Link to="/containers" className={location.pathname === '/containers' ? 'active' : ''}>Contenedores</Link>
+                  <Link to="/git-github" className={location.pathname === '/git-github' ? 'active' : ''}>Git & GitHub</Link>
                 </div>
               </div>
             )
@@ -134,6 +136,7 @@ export default function App() {
         <Route path="/deploy-environments" element={<PrivateRoute><DeployEnvironments /></PrivateRoute>} />
         <Route path="/deploy-guide" element={<PrivateRoute><DeployGuide /></PrivateRoute>} />
         <Route path="/unit-tests-guide" element={<PrivateRoute><UnitTestsGuide /></PrivateRoute>} />
+        <Route path="/git-github" element={<PrivateRoute><GitGithubGuide /></PrivateRoute>} />
       </Routes>
     </div>
   )

@@ -19,7 +19,11 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             var dict = new Dictionary<string, string?>
             {
                 ["UseInMemoryForTests"] = "true",
-                ["ForceInMemory"] = "true"
+                ["ForceInMemory"] = "true",
+                ["Jwt:SecretKey"] = "SuperSecretKeyForTestsOnly_MustBeAtLeast32CharactersLongForHS256Algorithm",
+                ["Jwt:Issuer"] = "ASISYA_ev_Tests",
+                ["Jwt:Audience"] = "ASISYA_ev_clients",
+                ["Jwt:ExpirationMinutes"] = "60"
             };
             cfg.AddInMemoryCollection(dict);
         });

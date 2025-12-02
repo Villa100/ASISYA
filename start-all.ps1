@@ -88,6 +88,12 @@ $apiJob = Start-Job -ScriptBlock {
         $env:ASPNETCORE_ENVIRONMENT = "Development"
         $env:UseInMemoryForTests = "true"
         $env:ForceInMemory = "true"
+        # Claves JWT para desarrollo local (NO usar en produccion)
+        if (-not $env:Jwt__SecretKey -or $env:Jwt__SecretKey.Length -lt 32) {
+            $env:Jwt__SecretKey = "LocalDev-DoNotUseInProd-SecretKey-0123456789-ABCDEF-0123456789"
+        }
+        if (-not $env:Jwt__Issuer) { $env:Jwt__Issuer = "ASISYA_DEV" }
+        if (-not $env:Jwt__Audience) { $env:Jwt__Audience = "ASISYA_DEV_CLIENTS" }
     }
     
     dotnet run

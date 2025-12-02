@@ -79,6 +79,54 @@ Esto asegura integración continua y despliegue automatizado, facilitando la cal
 
 ---
 
+## 🔧 Troubleshooting Docker
+
+Si experimentas problemas con Docker Desktop (por ejemplo, error 500 del engine), consulta la guía detallada de troubleshooting:
+
+📖 **[../DOCKER_TROUBLESHOOTING.md](../DOCKER_TROUBLESHOOTING.md)**
+
+Esta guía incluye:
+- Reiniciar WSL2 y Docker Desktop
+- Reset a valores de fábrica
+- Actualización de WSL2
+- Reinstalación de Docker Desktop
+- Verificación de requisitos del sistema
+- Modo InMemory como alternativa temporal
+
+---
+
+## Scripts Automatizados de Inicio
+
+El proyecto incluye scripts PowerShell para automatizar el inicio y detención de servicios:
+
+### Desarrollo (InMemory - Sin Docker)
+```powershell
+# Desde raíz del proyecto
+.\start-dev.ps1
+.\stop-all.ps1
+```
+
+### Desarrollo con Docker
+```powershell
+.\start-dev-docker.ps1  # Inicia db, cache, api
+.\stop-docker.ps1       # Detiene servicios
+.\stop-docker.ps1 -PruneVolumes  # Detiene y elimina volúmenes
+```
+
+### Pruebas con Docker
+```powershell
+.\start-test-docker.ps1
+.\stop-docker.ps1
+```
+
+Estos scripts incluyen:
+- ✅ Verificación automática de Docker Desktop
+- ✅ Timeout y reintentos para esperar que servicios estén listos
+- ✅ Health checks de la API (Swagger)
+- ✅ Mensajes informativos de progreso
+
+---
+
 ## Ejemplos de Despliegue y Detención por Ambiente
 
 ### 🖥️ Desarrollo Local (Sin Docker)
